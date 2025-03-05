@@ -122,9 +122,20 @@ else:  # Import/Export
         st.info("No expenses to export.")
 
 # Display current expenses
+# if not st.session_state.expenses_df.empty:
+#     st.subheader("Recent Expenses")
+#     st.dataframe(
+#         st.session_state.expenses_df.sort_values('date', ascending=False).head(5),
+#         use_container_width=True
+#     )            // Some Error in this line of code
+
 if not st.session_state.expenses_df.empty:
+    # Convert the 'date' column to datetime format
+    st.session_state.expenses_df['date'] = pd.to_datetime(st.session_state.expenses_df['date'], errors='coerce')
+
+    # Sort the DataFrame by date
+    st.session_state.expenses_df = st.session_state.expenses_df.sort_values('date', ascending=False)
+
+    # Display the dataframe
     st.subheader("Recent Expenses")
-    st.dataframe(
-        st.session_state.expenses_df.sort_values('date', ascending=False).head(5),
-        use_container_width=True
-    )
+    st.dataframe(st.session_state.expenses_df.head(5), use_container_width=True)
